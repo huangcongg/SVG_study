@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    path{
+      stroke: #9370DB;
+      stroke-width: 10px;
+    }
+    path:hover{
+      stroke: red;
+    }
+    text{
+      /* 文字的颜色：是用fill进行填充 */
+      fill:none;
+      font-size:50px;
+      stroke:red;
+      stroke-width: 2px;
+      text-shadow: 0 0 50px #333;
+    }
+  </style>
+</head>
+<body>
+  <svg width="600" height="600">
+    <path d="
+        M 18,3
+          L 46,3
+          L 46,40
+          L 61,40
+          L 32,68
+          L 3,40
+          L 18,40
+          Z
+      " fill="none"></path>
+      <text x="200" y="300">
+        这是绘制路径
+      </text>
+        
+  </svg>
+</body>
+</html>
