@@ -194,7 +194,9 @@ SVG代码都放在顶层标签<svg>之中.下面是一个例子.
   * L:画直线到(lineto)
   * Z:闭合路径
 
-2.9.`<text>`标签
+![image-20210526175216192](README.assets/image-20210526175216192.png)
+
+### 2.9.`<text>`标签
 
 `<text>`标签用于绘制文本.
 
@@ -206,3 +208,121 @@ SVG代码都放在顶层标签<svg>之中.下面是一个例子.
 
 * x,y表示文本区块基线起点的纵坐标和横坐标
 * text的样式中文字的颜色不再用color来设定,二十用**fill**
+
+### 2.10.`<use>`标签
+
+`<use>`标签用于复制一个形状.
+
+```xml
+<svg width="600" height="600">
+    <circle id="circle1" cx="200" cy="200" r="50" fill="orange" stroke="skyblue" stroke-width="10"></circle>
+    <use href="#circle1" x="200" y="200" ></use>
+</svg>
+```
+
+* href属性指定所要复制的节点,x属性和y属性是左上角的坐标(距离复制的节点的纵距离和横距离).另外,还可以指定width和height坐标.
+
+### 2.11.`<g>`标签
+
+`<g>`标签用于将多个形状组成一个组(group),方便复用
+
+```xml
+<svg width="600" height="1200">
+    <g id="miqi">
+        <circle cx="100" cy="100" r="50"></circle>
+        <circle cx="500" cy="100" r="50"></circle>
+        <circle cx="300" cy="300" r="200"></circle>
+    </g>
+    <use href="#miqi" x="0" y="450"></use>
+</svg>
+```
+
+### 2.12.`<defs>`标签
+
+`<defs>`标签用于自定义形状,它内部的代码不会显示,仅供引用.
+
+```xml
+<svg width="600" height="1200">
+    <defs>
+        <g id="miqi">
+            <circle cx="100" cy="100" r="50"></circle>
+            <circle cx="500" cy="100" r="50"></circle>
+            <circle cx="300" cy="300" r="200"></circle>
+        </g>
+    </defs>
+
+    <use href="#miqi" x="0" y="450"></use>
+</svg>
+```
+
+### 2.13.`<patten>`标签
+
+`<patten>`标签用于自定义一个形状,该形状可以被引用来平铺一个区域.
+
+```html
+<svg width="500" height="500">
+	<defs>
+    	<pattern id="dots" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+        	<circle fill="#bee9e8" cx="50" cy="50" r="35"/>
+        </pattern>
+    </defs>
+    <rect x="0" y="0" width="100%" height="100%" fill="url(#dots)"/>
+</svg>
+```
+
+* 上面代码中,`<pattern>`标签将一个圆形定义为dots模式.patternUnits="userSpaceOnUse"表示`<pattern>`的宽度和长度是实际的像素值.然后,指定这个模式去填充下面的矩形.(是将pattern的宽度和高度固定住，在指定区域内平铺，能铺多少铺多少，超出部分裁掉)
+
+* 当patternUnits="objectBoundingBox"时，我们通过指定width和height来间接规定图案平铺的数量。因为这时，width和height被限制在0~1，或者0%~100%之间，即宽度或高度占填充区域高度或宽度的百分比。可想而知20%放5个，40%放2.5个。
+
+### 2.14.`<image>`标签
+
+`<image>`标签用于插入图片文件.
+
+```html
+<svg viewBox="0 0 100 100" width="100" height="100">
+	<image xlink:href="path/to/image.jpg" width="50%" height="50%"/>
+</svg>
+```
+
+* 上面代码中,<image>的xlink:href属性表示图像的来源
+
+### 2.15.`<animate>`标签
+
+`<animate>`标签用于产生动画效果.
+
+```html
+<svg width="500px" height="500px">
+	<rect x="0" y="0" width="100" height="100" fill="#feac5e">
+    	<animate attributeName="x" from="0" to="500" dur="2s" repeatCount="indefinite"/>
+    </rect>
+</svg>
+```
+
+* 上面的代码中,矩形会不断移动,产生动画效果.
+* animate的属性含义:
+  * attributeName: 发生动画效果的属性名.
+  * from: 单次动画的初始值.
+  * to: 单词动画的结束值.
+  * dur: 单词动画的持续时间.
+  * repeatCount: 动画的循环模式.
+* 可以再多个属性上面定义动画.
+
+```html
+<animate attributeName="x" from="0" to="500" dur="2s" repeatCount="indefinite"/>
+<animate attributeName="width" to="500" dur="2s" repeatCount="indefinite"/>
+```
+
+2.16.`<animateTransform>`标签
+
+`<animate>`标签对css的transform属性不起作用,如果需要变形,就要使用`<animateTransform>`标签.
+
+```html
+<svg width="500px" height="500px">
+	<rect x="250" y="250" width="50" height="50" fill="#4bc0c8">
+    	<animateTransform attributeName="transform" type="rotate" begin="0s" dur="10s" from="0 200 200" to="360 400 400" repeatCount="indefinite"/>
+    </rect>
+</svg>
+```
+
+* 上面代码中 ,`<animateTransform>`的效果为旋转(rotate),这时from和to属性值有三个数字,第一个数字是角度值,第二个值和第三个值是旋转中心的坐标.from="0 200 200"表示开始时,角度为0,围绕(200,200)开始旋转;to="360 400 400"表示结束时,角度为360,围绕(400,400)旋转.
+
