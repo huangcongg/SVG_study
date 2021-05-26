@@ -326,3 +326,85 @@ SVG代码都放在顶层标签<svg>之中.下面是一个例子.
 
 * 上面代码中 ,`<animateTransform>`的效果为旋转(rotate),这时from和to属性值有三个数字,第一个数字是角度值,第二个值和第三个值是旋转中心的坐标.from="0 200 200"表示开始时,角度为0,围绕(200,200)开始旋转;to="360 400 400"表示结束时,角度为360,围绕(400,400)旋转.
 
+## 三.svg环形进度条
+
+* index.html文件内容如下:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .text{
+      /* 文本水平居中 */
+      text-anchor: middle;
+      dominant-baseline: middle;
+    }
+    body{
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <svg width="700" height="700">
+    <!-- 设置底色的圆环 -->
+    <circle cx="350" cy="350" r="300"
+      fill="none" stroke="gray"
+      stroke-width="40" stroke-linecap="round"/>
+    
+    <!-- 设置进度条 -->
+    <circle class="progress"
+      transform="rotate(-90,350,350)"
+      cx="350" cy="350" r="300"
+      fill="none" stroke="red"
+      stroke-width="40"
+      stroke-linecap="round"
+      stroke-dasharray="0,10000"/>
+    <!-- stroke-dasharray:一个表示长度,一个表示间距 -->
+    <!-- 设置文本 -->
+    <text class="text" x="350" y="350"
+      font-size="200" fill="red">0</text>
+  </svg>
+  <script src="js/index.js"></script>
+</body>
+</html>
+```
+
+* index.js文件
+
+```shell
+var processDom = document.querySelector(".progress")
+var textDom = document.querySelector(".text")
+function rotateCircle (percent) {
+  // 获取svg圆形环的总长,通过获取半径长度算出总长
+  var circleLength = Math.floor(2 * Math.PI * parseInt(processDom.getAttribute("r")));
+  // 按照百分比,算出进度环的长度
+  var value = percent*circleLength/100;
+  // 红色rgb是255,0,0
+  // 蓝色rgb是0,191,255
+  var red = 255 + parseInt((0-255)/100*percent);
+  var green = 0 + parseInt((191-0)/100*percent);
+  var blue = 0 + parseInt((255-0)/100*percent);
+  // 设置stroke-dasharray和路径的颜色
+  processDom.setAttribute('stroke-dasharray', value + ", 10000");
+  processDom.setAttribute('stroke', `rgb(${red},${green},${blue})`);
+  // 设置文本内容和颜色
+  textDom.innerHTML = percent + '%';
+  textDom.setAttribute("fill", `rgb(${red},${green},${blue})`)
+}
+
+// 30毫秒变化将进度+1
+let num = 0;
+setInterval(() => {
+  num++;
+  if(num>100){
+    num = 0
+  }
+  rotateCircle(num)
+},30)
+```
+
