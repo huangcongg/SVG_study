@@ -408,3 +408,63 @@ setInterval(() => {
 },30)
 ```
 
+* 思路重点是stroke-dasharray这个属性，第一个值表示虚线的实线部分，第二个值表示虚线的空线，部分，空线部分设置的很大，至少超过圆环的长度，比如10000，实线部分每30秒逐渐延长至100%；
+
+## 四.js操作svg
+
+* obj = document.querySelector():按照标签名/#id名/.class名选择dom
+* console.log([obj]): 对象加中括号可以展开对象
+* obj.setAttribute('width或其他属性',''):设置属性值 
+
+### 4.1.DOM操作
+
+如果SVG代码直接写在HTML网页中之中,它就成为网页DOM的一部分,可以直接用DOM操作.
+
+```xml
+<svg
+	id="mysvg"
+    viewBox="0 0 800 600"
+    preserveAspectRatio="xMidYMid meet"
+>
+    <circle id="mycircle" cx="400" cy="300" r="50" />
+</svg>
+```
+
+上面的代码插入网页之后,就可以用css定制样式.
+
+```css
+circle {
+    stroke-width: 5;
+    stroke: #f00;
+    fill: #ff0;
+}
+circle:hover {
+    stroke: #090;
+    fill: #fff;
+}
+```
+
+然后,可以用Javascript代码操作SVG.
+
+```js
+var mycircle = document.getElementById('mycircle');
+mycircle.addEventListener('click', function(e) {
+    console.log('circle clicked - enlarging');
+    mycircle.setAttribute('r', 60);
+}, false)
+```
+
+上面代码指定,如果点击图像,就改写circle元素的r属性.
+
+### 4.2.获取SVG DOM
+
+使用,`<object>`,`<embed>`标签插入SVG文件,可以获取SVG DOM.
+
+```javascript
+var svgObject = document.getElementById('object').contentDocument;
+var svgIframe = document.getElementById('iframe').contentDocument;
+var svgEmbed = document.getElementById('embed').getSVGDocument();
+```
+
+注意,如果使用`<img>`标签插入SVG文件,就无法获取SVG DOM.
+
