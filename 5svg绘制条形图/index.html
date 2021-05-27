@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .axis{
+      stroke: black;
+    }
+  </style>
+</head>
+<body>
+  <!-- 
+    1/获取数据
+    2/创建SVG
+    3/创建坐标
+    4/绘制坐标文字
+    5/依据数据绘制矩形(条形)
+   -->
+   <svg width="1000" height="700">
+     <g id="zuobiao">
+       <!-- x轴 -->
+       <line class="axis" x1="50" y1="600" x2="950" y2="600" stroke="black"></line>
+       <path d="M 925,590 L 950,600 L 925,610"></path>
+       <text x="920" y="630">时间</text>
+       <!-- y轴 -->
+       <line class="axis" x1="100" y1="650" x2="100" y2="50" stroke="black"></line>
+       <path d="M 90,75 L 100,50 L 110,75"></path>
+       <text x="50" y="70">订单</text>
+
+     </g>
+     <g id="xkedu"></g>
+     <g id="ykedu"></g>
+     <g id="barList">
+        
+     </g>
+   </svg>
+   <script>
+     var data = [
+       {data:"星期一",order:"1000"},
+       {data:"星期二",order:"1000"},
+       {data:"星期三",order:"1000"},
+       {data:"星期四",order:"1000"},
+       {data:"星期五",order:"1000"},
+       {data:"星期六",order:"1000"},
+       {data:"星期日",order:"500"}
+     ]
+
+     var xkedu = document.querySelector('#xkedu')
+     var ykedu = document.querySelector('#ykedu')
+     var barListDom = document.querySelector('#barList')
+
+      var jgLength = 700/data.length;
+      var yLength = 450/15;
+
+      for(var i=1;i<=data.length;i++){
+        renderKedu(i)
+        console.log(i);
+      }
+      for(var index=1;index<15;index++){
+        ykedu.innerHTML = ykedu.innerHTML + `<line class="axis" x1="100" y1="${600-yLength*index}" x2="120" y2="${600-yLength*index}"></line>` + `<text x="50" y="${600-yLength*index}">${100*index}</text>` 
+
+      }
+      function renderKedu(index){
+        var lineDom = document.createElement("line")
+        console.log(jgLength)
+        lineDom.className = "axis";
+        lineDom.setAttribute("x1",100+jgLength*index);
+        lineDom.setAttribute("y1","600");
+        lineDom.setAttribute("x2",100+jgLength*index);
+        lineDom.setAttribute("y2","580");
+        xkedu.innerHTML = xkedu.innerHTML + lineDom.outerHTML + `<text x="${75+jgLength*index}" y="620">${data[index-1].data}</text>` 
+
+        var color = `rgb(${parseInt(Math.random()*255)},${parseInt(Math.random()*255)},${parseInt(Math.random()*255)})`
+        barListDom.innerHTML = barListDom.innerHTML + `<rect x="${75+jgLength*index}" y="${600-(yLength*(data[index-1].order/100))}" width="50" height="${yLength*(data[index-1].order/100)}" fill="${color}"></rect>`
+      }
+   </script>
+</body>
+</html>
